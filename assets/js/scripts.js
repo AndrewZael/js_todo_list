@@ -5,6 +5,17 @@ const addTask = document.getElementById('add-task');
 const contentTasks = document.getElementById('tasks');
 const arrTasks = [];
 
+
+// Pinta en pantalla la lista
+function printHtmlList(){
+    let html = '';
+    contentTasks.innerHTML = '';
+    for (const item of arrTasks) {
+        html += getTemplateTask(item.id, item.task, item.done);
+    }
+    contentTasks.innerHTML = html;
+}
+
 // Muestra en pantalla el total de tareas (Realizadas y total tareas)
 function total(){
     totalTask.innerHTML = arrTasks.length;
@@ -22,7 +33,7 @@ function saveTask(){
     let id = Date.now();
     let task = textTask.value;
     arrTasks.push({id, task, done: false});
-    contentTasks.innerHTML += getTemplateTask(id, task);
+    printHtmlList();
     textTask.value = '';
     total();
 }
@@ -32,7 +43,7 @@ function deleteTask(id, task){
     if(confirm(`¿Seguro que desea eliminar la tarea ${task}?`)){
         const i = arrTasks.findIndex(item => item.id === id);
         arrTasks.splice(i, 1);
-        document.getElementById(`content-${id}`).remove();
+        printHtmlList();
         total();
     }
 }
@@ -43,22 +54,23 @@ function taskDone(id, task){
     const i = arrTasks.findIndex(item => item.id === id);
     if(checked.checked) {
         arrTasks[i].done = true;
-        checked.setAttribute('checked', true);
     }else{
         arrTasks[i].done = false;
-        checked.removeAttribute('checked');
     }
+    setTimeout(() => {
+        printHtmlList();   
+    },100);
     total();
 }
 
 // Retorna un template tarea
-function getTemplateTask(id, task){
+function getTemplateTask(id, task, done){
     return `<li id="content-${id}" class="row mx-0 align-items-center rounded mb-1 py-2 border">
     <span class="col">${id}</span>
     <span class="col">${task}</span>
     <div class="col">
         <div class="form-check">
-            <input onchange="taskDone(${id}, '${task}')" class="form-check-input" type="checkbox" value="" id="task-${id}">
+            <input onchange="taskDone(${id}, '${task}')" class="form-check-input" type="checkbox" value="" id="task-${id}" ${done && 'checked'}>
             <label class="form-check-label" for="task-${id}">Completada</label>
           </div>
     </div>
