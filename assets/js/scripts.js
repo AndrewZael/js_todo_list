@@ -4,6 +4,7 @@ const textTask = document.getElementById('text-task');
 const addTask = document.getElementById('add-task');
 const contentTasks = document.getElementById('tasks');
 const contentNotice = document.getElementById('notice');
+const headTasks = document.getElementById('header-tasks');
 const arrTasks = [];
 
 printHtmlList();
@@ -46,10 +47,14 @@ function saveTask(){
 function deleteTask(id, task){
     if(confirm(`¿Seguro que desea eliminar la tarea ${task}?`)){
         const i = arrTasks.findIndex(item => item.id === id);
+        const taksHtml = document.querySelectorAll('.item-task');
+        taksHtml[i].classList.add('alert-danger', 'border-danger', 'remove');
         arrTasks.splice(i, 1);
-        printHtmlList();
-        total();
-        notice();
+        setTimeout(() => {
+            printHtmlList();
+            total();
+            notice();
+        },2000);
     }
 }
 
@@ -66,7 +71,7 @@ function taskDone(id, task){
 
 // Retorna un template tarea
 function getTemplateTask(id, task, done){
-    return `<li id="content-${id}" class="row mx-0 align-items-center rounded mb-1 py-3 py-sm-2 border">
+    return `<li id="content-${id}" class="item-task row mx-0 align-items-center rounded mb-1 py-3 py-sm-2 border ${done && 'alert-success border-success'}">
     <div class="col-6 col-sm-3 mb-3 mb-sm-0">
         <small class="d-block d-sm-none fw-bold mb-1">ID</small>
         <span>${id}</span>
@@ -95,13 +100,18 @@ function getTemplateTask(id, task, done){
 </li>`;
 }
 
-//
+// Verifica si existe alguna tarea agregada
 function notice(){
     if(arrTasks.length === 0){
-        contentNotice.innerHTML = `<div class="alert alert-info border-info my-4" role="alert">
-            <i class="fa-solid fa-circle-info me-2"></i> Aún no has creado ninguna tarea.
+        headTasks.classList.add('invisible');
+        contentNotice.innerHTML = `
+        <div class="text-center p-5 pb-5">
+            <i class="fa-solid fa-inbox fa-10x text-info"></i>
+            <h2 class="mt-4 mb-2">Está algo vacío por aquí</h2>
+            <p>Agrega nuevas tareas a tu lista.</p>
         </div>`;
     }else{
+        headTasks.classList.remove('invisible');
         contentNotice.innerHTML = '';
     }
 }
