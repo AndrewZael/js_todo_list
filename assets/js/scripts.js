@@ -3,8 +3,11 @@ const okTask = document.getElementById('ok-task');
 const textTask = document.getElementById('text-task');
 const addTask = document.getElementById('add-task');
 const contentTasks = document.getElementById('tasks');
+const contentNotice = document.getElementById('notice');
 const arrTasks = [];
 
+printHtmlList();
+notice();
 
 // Pinta en pantalla la lista
 function printHtmlList(){
@@ -36,6 +39,7 @@ function saveTask(){
     textTask.value = '';
     printHtmlList();
     total();
+    notice();
 }
 
 // Elimina una tarea
@@ -45,6 +49,7 @@ function deleteTask(id, task){
         arrTasks.splice(i, 1);
         printHtmlList();
         total();
+        notice();
     }
 }
 
@@ -88,4 +93,15 @@ function getTemplateTask(id, task, done){
     </div>
     
 </li>`;
+}
+
+//
+function notice(){
+    if(arrTasks.length === 0){
+        contentNotice.innerHTML = `<div class="alert alert-info border-info my-4" role="alert">
+            <i class="fa-solid fa-circle-info me-2"></i> Aún no has creado ninguna tarea.
+        </div>`;
+    }else{
+        contentNotice.innerHTML = '';
+    }
 }
