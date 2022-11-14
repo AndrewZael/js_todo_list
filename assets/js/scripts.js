@@ -33,8 +33,8 @@ function saveTask(){
     let id = Date.now();
     let task = textTask.value;
     arrTasks.push({id, task, done: false});
-    printHtmlList();
     textTask.value = '';
+    printHtmlList();
     total();
 }
 
@@ -52,11 +52,7 @@ function deleteTask(id, task){
 function taskDone(id, task){
     const checked = document.getElementById(`task-${id}`);
     const i = arrTasks.findIndex(item => item.id === id);
-    if(checked.checked) {
-        arrTasks[i].done = true;
-    }else{
-        arrTasks[i].done = false;
-    }
+    checked.checked ? arrTasks[i].done = true : arrTasks[i].done = false; 
     setTimeout(() => {
         printHtmlList();   
     },100);
@@ -65,19 +61,31 @@ function taskDone(id, task){
 
 // Retorna un template tarea
 function getTemplateTask(id, task, done){
-    return `<li id="content-${id}" class="row mx-0 align-items-center rounded mb-1 py-2 border">
-    <span class="col">${id}</span>
-    <span class="col">${task}</span>
-    <div class="col">
+    return `<li id="content-${id}" class="row mx-0 align-items-center rounded mb-1 py-3 py-sm-2 border">
+    <div class="col-6 col-sm-3 mb-3 mb-sm-0">
+        <small class="d-block d-sm-none fw-bold mb-1">ID</small>
+        <span>${id}</span>
+    </div>
+    <div class="col-6 col-sm-3 mb-3 mb-sm-0">
+        <small class="d-block d-sm-none fw-bold mb-1">Tarea</small>
+        <span class="col">${task}</span>
+    </div>
+
+    <div class="col-6 col-sm-3 mb-3 mb-sm-0">
+        <small class="d-block d-sm-none fw-bold mb-1">¿Tarea realizada?</small>
         <div class="form-check">
             <input onchange="taskDone(${id}, '${task}')" class="form-check-input" type="checkbox" value="" id="task-${id}" ${done && 'checked'}>
             <label class="form-check-label" for="task-${id}">Completada</label>
           </div>
     </div>
-    <span class="col">
-        <button onclick="deleteTask(${id}, '${task}')" class="btn btn-outline-danger border-0">
-            <i class="fa-solid fa-trash-can"></i>
-        </button>
-    </span>
+
+    <div class="col-6 col-sm-3">
+        <span class="col">
+            <button onclick="deleteTask(${id}, '${task}')" class="btn btn-outline-danger border-0">
+                <i class="fa-solid fa-trash-can"></i> <span class="d-sm-none">Eliminar</span>
+            </button>
+        </span>
+    </div>
+    
 </li>`;
 }
