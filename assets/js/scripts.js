@@ -36,7 +36,7 @@ addTask.addEventListener('click', function(){
 function saveTask(){
     let id = Date.now();
     let task = textTask.value;
-    arrTasks.push({id, task, done: false});
+    arrTasks.unshift({id, task, done: false});
     textTask.value = '';
     printHtmlList();
     total();
