@@ -30,7 +30,7 @@ function saveTask(){
     let id = Date.now();
     let task = textTask.value;
     let done = false;
-    arrTasks.push({id, task, done});
+    arrTasks.unshift({id, task, done});
     textTask.value = '';
     printHtmlList();
     total();
