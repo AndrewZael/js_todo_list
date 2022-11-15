@@ -10,6 +10,11 @@ const arrTasks = [];
 printHtmlList();
 notice();
 
+// Escucha el evento click del botón agregar 
+addTask.addEventListener('click', function(){
+    textTask.value != '' ? saveTask() : alert('Debe completar el campo tarea');
+});
+
 // Pinta en pantalla la lista
 function printHtmlList(){
     let html = '';
@@ -20,27 +25,22 @@ function printHtmlList(){
     contentTasks.innerHTML = html;
 }
 
-// Muestra en pantalla el total de tareas (Realizadas y total tareas)
-function total(){
-    totalTask.innerHTML = arrTasks.length;
-    okTask.innerHTML = arrTasks.filter(item => item.done === true).length;
-    console.log(arrTasks);
-}
-
-// Escucha el evento click del botón agregar 
-addTask.addEventListener('click', function(){
-    textTask.value != '' ? saveTask() : alert('Debe completar el campo tarea');
-});
-
 // guarda tarea en arrTasks, muestra tarea en el HTML y limpia el input textTask
 function saveTask(){
     let id = Date.now();
     let task = textTask.value;
-    arrTasks.push({id, task, done: false});
+    let done = false;
+    arrTasks.push({id, task, done});
     textTask.value = '';
     printHtmlList();
     total();
     notice();
+}
+
+// Muestra en pantalla el total de tareas (Realizadas y total tareas)
+function total(){
+    totalTask.innerHTML = arrTasks.length;
+    okTask.innerHTML = arrTasks.filter(item => item.done === true).length;
 }
 
 // Elimina una tarea
@@ -58,11 +58,11 @@ function deleteTask(id, task){
     }
 }
 
-// Cambia el la key done de una tarea entre true y false
-function taskDone(id, task){
+// Cambia la key done de una tarea entre true y false
+function taskDone(id){
     const checked = document.getElementById(`task-${id}`);
     const i = arrTasks.findIndex(item => item.id === id);
-    checked.checked ? arrTasks[i].done = true : arrTasks[i].done = false; 
+    arrTasks[i].done = checked.checked; 
     setTimeout(() => {
         printHtmlList();   
     },100);
@@ -84,7 +84,7 @@ function getTemplateTask(id, task, done){
     <div class="col-6 col-sm-3 mb-3 mb-sm-0">
         <small class="d-block d-sm-none fw-bold mb-1">¿Tarea realizada?</small>
         <div class="form-check">
-            <input onchange="taskDone(${id}, '${task}')" class="form-check-input" type="checkbox" value="" id="task-${id}" ${done && 'checked'}>
+            <input onchange="taskDone(${id})" class="form-check-input" type="checkbox" value="" id="task-${id}" ${done && 'checked'}>
             <label class="form-check-label" for="task-${id}">Completada</label>
           </div>
     </div>
