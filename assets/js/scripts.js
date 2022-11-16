@@ -60,9 +60,8 @@ function deleteTask(id, task){
 
 // Cambia la key done de una tarea entre true y false
 function taskDone(id){
-    const checked = document.getElementById(`task-${id}`);
     const i = arrTasks.findIndex(item => item.id === id);
-    arrTasks[i].done = checked.checked; 
+    arrTasks[i].done = !arrTasks[i].done; 
     setTimeout(() => {
         printHtmlList();   
     },100);
@@ -84,8 +83,8 @@ function getTemplateTask(id, task, done){
     <div class="col-6 col-sm-3 mb-3 mb-sm-0">
         <small class="d-block d-sm-none fw-bold mb-1">¿Tarea realizada?</small>
         <div class="form-check">
-            <input onchange="taskDone(${id})" class="form-check-input" type="checkbox" value="" id="task-${id}" ${done && 'checked'}>
-            <label class="form-check-label" for="task-${id}">Completada</label>
+            <input onchange="taskDone(${id})" class="form-check-input" type="checkbox" value="" id="task" ${done && 'checked'}>
+            <label class="form-check-label" for="task">Completada</label>
           </div>
     </div>
 
